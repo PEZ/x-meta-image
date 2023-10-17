@@ -1,0 +1,16 @@
+**/classes
+**/target
+**/.artifacts
+**/.cpcache
+**/.DS_Store
+**/.gradle
+
+
+# IDE things
+*.iml
+.idea/replstate.xml
+.nrepl-port
+.calva/output-window/output.calva-repl
+.lsp/sqlite*.db
+.clj-kondo/.cache/
+.lsp/.cache/

@@ -1,0 +1,6 @@
+{:deps {org.clojure/clojure {:mvn/version "1.12.0-alpha2"}
+        babashka/fs {:mvn/version "0.4.19"}
+        com.phronemophobic/membrane {:mvn/version "0.14.2-beta"}
+        com.phronemophobic.membrane/skialib-linux-x86-64 {:mvn/version "0.14-beta"}
+        com.phronemophobic.membrane/skialib-macosx-aarch64 {:mvn/version "0.14-beta"}
+        com.phronemophobic.membrane/skialib-macosx-x86-64 {:mvn/version "0.14-beta"}}}
