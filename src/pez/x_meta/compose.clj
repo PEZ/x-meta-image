@@ -133,6 +133,7 @@
          (save-as! "jpg" new-path))))
 
 ;; The Playground is this Rich Comment Form
+;; Evaluate the top level forms in the `comment` form, one by one
 (comment
   (def original-path "assets/kitten.png")
   (def article-meta {:title "Adding Back Article Information to Links on X"
@@ -147,38 +148,40 @@
        (save-as! "jpg" (meta-fs/replace-ext original-path "-twitter.jpg")))
 
   ;; Use Membrane UI to work more interactively with the composition
+  ;; When you have evaluated this, you can try editing something above
+  ;; and evaluate that, and see what happens.
+  (do
+    ;; Show errors in the UI
+    (defmacro wrap-errors [body]
+      `(try
+         (ui/try-draw
+          ~body
+          (fn [draw# e#]
+            (draw# (ui/label e#))))
+         (catch Exception e#
+           (ui/label e#))))
 
-  ;; Show errors in the UI
-  (defmacro wrap-errors [body]
-    `(try
-       (ui/try-draw
-        ~body
-        (fn [draw# e#]
-          (draw# (ui/label e#))))
-       (catch Exception e#
-         (ui/label e#))))
+    ;; Evaluate `debug-img` and open the file in your editor
+    ;; (Handy if you have only one screen.)
+    (defonce debug-img (str (fs/create-temp-file {:prefix "debug-img-" :suffix ".png"})))
 
-  ;; Evaluate `debug-img` and open the file in your editor
-  ;; (Handy if you have only one screen.)
-  (defonce debug-img (str (fs/create-temp-file {:prefix "debug-img-" :suffix ".png"})))
+    (defn debug [window-info]
+      (wrap-errors
+       (let [[cw ch] (:container-size window-info)]
+         (aspect-fill
+          [cw ch]
+          (let [elem
+                (->> (ui/image original-path)
+                     (aspect-scale-to-width 1200)
+                     (crop-to-height 675 true)
+                     (add-texts! article-meta))]
+            (skia/save-image debug-img elem) ; This writes the debug image
+            elem)))))
 
-  (defn debug [window-info]
-    (wrap-errors
-     (let [[cw ch] (:container-size window-info)]
-       (aspect-fill
-        [cw ch]
-        (let [elem
-              (->> (ui/image original-path)
-                   (aspect-scale-to-width 1200)
-                   (crop-to-height 675 true)
-                   (add-texts! article-meta))]
-          (skia/save-image debug-img elem) ; This writes the debug image
-          elem)))))
-
-  ;; Start the UI app
-  (skia/run
-   #'debug
-   {:include-container-info true})
+    ;; Start the UI app
+    (skia/run
+     #'debug
+     {:include-container-info true}))
 
 
 
