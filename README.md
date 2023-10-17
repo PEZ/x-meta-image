@@ -1,6 +1,6 @@
 # Playground: X Link Metadata Image Overlay
 
-Adding back article info to links shared on [X](https://x.com) (formelly [Twitter](https://twitter.com))
+Adding back article info to links shared on [X](https://x.com) (formerly [Twitter](https://twitter.com))
 
 ![A defiant and angry kitten breaking through a scattering door decorated with a huge X signs](assets/kitten-twitter.jpg)
 
