@@ -2,7 +2,7 @@
 
 Adding back article info to links shared on [X](https://x.com) (formerly [Twitter](https://twitter.com))
 
-![A defiant and angry kitten breaking through a scattering door decorated with a huge X sign](assets/kitten-twitter.jpg)
+![A defiant and angry kitten breaking through a scattering door decorated with a huge X sign. Adding Back Article Information to Links on X. Peter Strömberg a.k.a. PEZ. Placing article header, author, and description as an image overlay on X Link Share Images.](assets/kitten-twitter.jpg)
 
 A REPL playground using [Clojure](https://clojure.org), [Membrane](https://github.com/phronmophobic/membrane), and [babashka.fs](https://github.com/babashka/fs).
 
@@ -22,7 +22,7 @@ If you have a Clojure development environment set up, open this project, start i
 
 Regardless if you're now or old to Clojure, you can watch this video and get the picture (pun intended) of how to use this project.
 
-[![Alt text](assets/kitten-youtube-github.jpg)](https://www.youtube.com/watch?v=ImBji-1bKkc)
+[![That defiant and angry kitten breaking through a scattering door decorated with a huge X sign again. This time with a Clojure logo and a Youtube playbutton added. Texts: Interactive Programming. Coding fun Powered by Clojure & Membrane](assets/kitten-youtube-github.jpg)](https://www.youtube.com/watch?v=ImBji-1bKkc)
 
 If you are new to Clojure, these are the things you need:
 
