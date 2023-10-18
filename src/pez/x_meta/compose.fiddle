@@ -52,7 +52,7 @@
 (defn create-share-image! [image-path new-path]
   (->> (ui/image image-path)
        (crop-to-height 675 false)
-       (skia/save-image new-path))) ; assuming new-path ends with `.jpg`
+       (save-as! "jpg" new-path)))
 
 ;; For X/Twitter we do the overlay thing
 (defn create-twitter-image! [image-path new-path {:keys [title description author]}]
@@ -65,4 +65,4 @@
          (add-texts! {:title title
                       :author author
                       :description shortened-description})
-         (skia/save-image new-path))))
+         (save-as! "jpg" new-path))))

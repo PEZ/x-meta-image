@@ -71,7 +71,8 @@
                      :author "Peter Strömberg a.k.a. PEZ"
                      :description "Placing article header, author, and description as an image overlay on X Link Share Images."})
 
-  ;; Writing to an image, see `compose.fiddle` for code that writes
+  ;; Writing to an image
+  ;; Keeping it simple. See `compose.fiddle ` for code that writes
   ;; smaller files. (warning, Java interop, haha)
   (->> (ui/image original-path [1200 nil]) ;; aspect scales to 1200 in width
        (crop-to-height 675 true)
