@@ -59,7 +59,7 @@
         (ui/padding 0 0  (- target-height h) 0 elem)
         elem))))
 
-(defn add-texts! [texts elem]
+(defn add-texts [texts elem]
   (let [overlay (create-text-overlay (ui/bounds elem) texts)]
     [elem overlay]))
 
@@ -83,7 +83,7 @@
   ;; Writing to an image
   (->> (ui/image original-path [1200 nil]) ;; aspect scales to 1200 in width
        (crop-to-height 675 true)
-       (add-texts! article-meta)
+       (add-texts article-meta)
        (save! (meta-fs/replace-ext original-path "-twitter.jpg")
               "jpg" ; use "png" for lossless compression regardless of quality
               80    ; for "jpg", it's a trade-off file size <-> fidelity
@@ -129,7 +129,7 @@
           (let [elem
                 (->> (ui/image original-path [1200 nil])
                      (crop-to-height 675 true)
-                     (add-texts! article-meta))]
+                     (add-texts article-meta))]
             (skia/save-image debug-img elem) ; This writes the debug image
                                              ; Note: Don't do this in prodcution
             elem)))))
