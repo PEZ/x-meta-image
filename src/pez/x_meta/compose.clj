@@ -64,10 +64,10 @@
     [elem overlay]))
 
 (def ext->skia-format
-  {"jpg" ::skia/image-format-jpeg
-   "jpeg" ::skia/image-format-jpeg
-   "png" ::skia/image-format-png
-   "webp" ::skia/image-format-webp})
+  {:jpg ::skia/image-format-jpeg
+   :jpeg ::skia/image-format-jpeg
+   :png ::skia/image-format-png
+   :webp ::skia/image-format-webp})
 
 (defn save! [path format quality elem]
   (skia/save-image path elem nil (ext->skia-format format) quality true))
@@ -85,8 +85,8 @@
        (crop-to-height 675 true)
        (add-texts article-meta)
        (save! (meta-fs/replace-ext original-path "-twitter.jpg")
-              "jpg" ; use "png" for lossless compression regardless of quality
-              80    ; for "jpg", it's a trade-off file size <-> fidelity
+              :jpg ; use :png for lossless compression regardless of quality
+              80   ; for :jpg, it's a trade-off file size <-> fidelity
               ))
 
   ;; Use Membrane UI to work more interactively with the composition.

@@ -7,7 +7,7 @@
 (defn create-share-image! [image-path new-path]
   (->> (ui/image image-path)
        (crop-to-height 675 false)
-       (save! new-path "jpg" 80)))
+       (save! new-path :jpg 80)))
 
 ;; For X/Twitter we do the overlay thing
 (defn create-twitter-image! [image-path new-path {:keys [title description author]}]
@@ -17,7 +17,7 @@
                                 description)]
     (->> (ui/image image-path)
          (crop-to-height 675 true)
-         (add-texts! {:title title
-                      :author author
-                      :description shortened-description})
-         (save! new-path "jpg" 80))))
+         (add-texts {:title title
+                     :author author
+                     :description shortened-description})
+         (save! new-path :jpg 80))))
