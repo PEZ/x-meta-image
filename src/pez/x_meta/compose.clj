@@ -6,7 +6,7 @@
             [pez.x-meta.fs :as meta-fs]))
 
 ;; Load this file in the REPL
-;; Then use the ”Playground” Rich Comment FORM
+;; Then use the ”Playground” Rich Comment Form
 ;; at the bottom of the file
 
 ;; The Membrane Skia backend has sweet text layout
