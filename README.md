@@ -1,10 +1,10 @@
-# Playground: X Link Metadata Image Overlay
+# Playground: X/Twitter Link Metadata Image Overlay
 
 Adding back article info to links shared on [X](https://x.com) (formerly [Twitter](https://twitter.com))
 
-![A defiant and angry kitten breaking through a scattering door decorated with a huge X signs](assets/kitten-twitter.jpg)
+![A defiant and angry kitten breaking through a scattering door decorated with a huge X sign](assets/kitten-twitter.jpg)
 
-A REPL playground using [Clojure](https://clojure.org), [Membrane](https://github.com/phronmophobic/membrane), the [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine), and [babashka.fs](https://github.com/babashka/fs).
+A REPL playground using [Clojure](https://clojure.org), [Membrane](https://github.com/phronmophobic/membrane), and [babashka.fs](https://github.com/babashka/fs).
 
 ## The Problem
 
@@ -14,7 +14,7 @@ X recently stopped displaying article information, such as header and brief summ
 
 For the blog [A few words from Agical](https://blog.agical.se/en) I made it so that the Twitter Card Image has an overlay with the missing article information. When sharing articles from the blog on X, the image preview look like the one decorating this README.
 
-As it was very fun creating the solutions in the REPL, I decided to create this little Playground project and share it with you. I've tried to make it really easy to use.
+As it was very fun creating the solutions in the REPL, I decided to create this little playground project and share it with you. I've tried to make it really easy to use.
 
 ## Usage
 
@@ -44,7 +44,7 @@ If VS Code is not your cup of tea. Check my [Getting Started with Clojure Guide]
 * When text breaks up in several lines, the whole text block gets higher
 * The overlay is placed with a fixed margin to the bottom
 
-The last two items can get a tricky, but not with Membrane. Which also solves the other requirements. In addition to this, the layout and composition of views in a UI fits well for the layout and composition we need for the image. With Membrane, the image and texts gets to be UI elements and straightforward to compose.
+The last two items can get a tricky, but with Membrane it is both simple and easy. Membrane also solves the other requirements beautifully. In addition to this, the layout and composition of views in a UI fits well for the layout and composition we need for the image. With Membrane, the image and texts gets to be UI elements and very straightforward to compose.
 
 Perhaps the most important part is the interactivity it provides. When running the composition in the Membrane UI, it gets fully reactive to changes in all code that build it up. And you can inspect everything about the app (composition) as it is running. It may be among the most interactive programming I have ever experienced, tbh.
 
