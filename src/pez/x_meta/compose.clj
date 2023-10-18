@@ -165,7 +165,7 @@
     ;; (Handy if you have only one screen.)
     (defonce debug-img (str (fs/create-temp-file {:prefix "debug-img-" :suffix ".png"})))
 
-    (defn debug [window-info]
+    (defn dev-app [window-info]
       (wrap-errors
        (let [[cw ch] (:container-size window-info)]
          (aspect-fill
@@ -176,11 +176,12 @@
                      (crop-to-height 675 true)
                      (add-texts! article-meta))]
             (skia/save-image debug-img elem) ; This writes the debug image
+                                             ; Note: Don't do this in prodcution
             elem)))))
 
     ;; Start the UI app
     (skia/run
-     #'debug
+     #'dev-app
      {:include-container-info true}))
 
 
