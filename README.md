@@ -20,6 +20,10 @@ As it was very fun creating the solutions in the REPL, I decided to create this 
 
 If you have a Clojure development environment set up, open this project, start its REPL and connect to it with your editor of choice. Then open the file [src/pez/x_meta/compose.clj](src/pez/x_meta/compose.clj), and follow the instructions there.
 
+Regardless if you're now or old to Clojure, you can watch this video and get the picture (pun intended) of how to use this project.
+
+[![Alt text](assets/kitten-youtube-github.jpg)](https://www.youtube.com/watch?v=ImBji-1bKkc)
+
 If you are new to Clojure, these are the things you need:
 
 1. Java (I can recommend [sdk-man](https://sdkman.io/) for installing Java)
@@ -30,7 +34,7 @@ If you are new to Clojure, these are the things you need:
    1. How to evaluate/load Clojure files in the REPL, using your editor
    1. How to evaluate Clojure forms (expressions/pieces of Clojure code) in your editor
 
-A way to gain that basic Clojure knowledge is to install [Calva](https://calva.io) in VS Code, and then issue the command **Calva: Fire up the Getting Start REPL**. (Once you have Java and Clojure installed.)
+A way to gain that basic Clojure knowledge is watch that video. And to install [Calva](https://calva.io) in VS Code, and then issue the command **Calva: Fire up the Getting Start REPL**. (Once you have Java and Clojure installed.)
 
 If VS Code is not your cup of tea. Check my [Getting Started with Clojure Guide](https://calva.io/get-started-with-clojure/) out anyway. It has some links to other Clojure learning resources.
 
