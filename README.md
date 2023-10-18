@@ -24,6 +24,8 @@ Regardless if you're now or old to Clojure, you can watch this video and get the
 
 [![That defiant and angry kitten breaking through a scattering door decorated with a huge X sign again. This time with a Clojure logo and a Youtube playbutton added. Texts: Interactive Programming. Coding fun Powered by Clojure & Membrane](assets/kitten-youtube-github.jpg)](https://www.youtube.com/watch?v=ImBji-1bKkc)
 
+(See [src/pez/x_meta/compose_yt_gh.clj](src/pez/x_meta/compose_yt_gh.clj) for a version of the app tha created the thumbnail used on Youtube, as well as ^that^ thumbnail.)
+
 If you are new to Clojure, these are the things you need:
 
 1. Java (I can recommend [sdk-man](https://sdkman.io/) for installing Java)
