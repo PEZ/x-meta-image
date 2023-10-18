@@ -63,6 +63,15 @@
   (let [overlay (create-text-overlay (ui/bounds elem) texts)]
     [elem overlay]))
 
+(def ext->skia-format
+  {"jpg" ::skia/image-format-jpeg
+   "jpeg" ::skia/image-format-jpeg
+   "png" ::skia/image-format-png
+   "webp" ::skia/image-format-webp})
+
+(defn save! [path format quality elem]
+  (skia/save-image path elem nil (ext->skia-format format) quality true))
+
 ;; The Playground is this Rich Comment Form
 ;; Evaluate the top level forms in the `comment` form, one by one
 (comment
@@ -72,12 +81,13 @@
                      :description "Placing article header, author, and description as an image overlay on X Link Share Images."})
 
   ;; Writing to an image
-  ;; Keeping it simple. See `compose.fiddle ` for code that writes
-  ;; smaller files. (warning, Java interop, haha)
   (->> (ui/image original-path [1200 nil]) ;; aspect scales to 1200 in width
        (crop-to-height 675 true)
        (add-texts! article-meta)
-       (skia/save-image (meta-fs/replace-ext original-path "-twitter.jpg")))
+       (save! (meta-fs/replace-ext original-path "-twitter.jpg")
+              "jpg" ; use "png" for lossless compression regardless of quality
+              80    ; for "jpg", it's a trade-off file size <-> fidelity
+              ))
 
   ;; Use Membrane UI to work more interactively with the composition.
   ;; Either evaluate the whole `(do ...)` or do it form, by form.
