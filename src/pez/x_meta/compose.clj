@@ -1,12 +1,9 @@
 (ns pez.x-meta.compose
   (:require [babashka.fs :as fs]
-            [clojure.java.io :as io]
             [membrane.skia :as skia]
             [membrane.skia.paragraph :as para]
             [membrane.ui :as ui]
-            [pez.x-meta.fs :as meta-fs])
-  (:import [java.awt.image BufferedImage]
-           [javax.imageio ImageIO]))
+            [pez.x-meta.fs :as meta-fs]))
 
 ;; Load this file in the REPL
 ;; Then use the ”Playground” Rich Comment FORM
@@ -66,60 +63,6 @@
   (let [overlay (create-text-overlay (ui/bounds elem) texts)]
     [elem overlay]))
 
-(defn load-image [image-path]
-  (ui/image image-path))
-
-;; The Skia backend does not support converting to an image blob (I think)
-;; So we go via saving to a temp PNG file and reading it back up again
-(defn ->imageIO-image [elem]
-  (let [temp-path (str (meta-fs/tmp-path! "membrane-to-imageIO" (str (gensym "image-") ".png")))
-        _image? (skia/save-image temp-path elem nil nil 0 false) ;; TODO: Handle error?
-        file (io/as-file temp-path)]
-    (ImageIO/read file)))
-
-;; ImageIO/write does not want to produce JPEGs fromimages with alpha layers
-(defn imageIO-rgba->rgb [image]
-  (let [width (.getWidth image)
-        height (.getHeight image)
-        rgb-image (BufferedImage. width height BufferedImage/TYPE_INT_RGB)
-        g (.createGraphics rgb-image)]
-    (.drawImage g image 0 0 nil)
-    (.dispose g)
-    rgb-image))
-
-(defn imageIO-save-as! [format new-path image]
-  (let [new-image (if (= format "jpg")
-                    (imageIO-rgba->rgb image)
-                    image)
-        new-image-file (io/as-file new-path)]
-    (if (ImageIO/write new-image format new-image-file)
-      new-image-file
-      (throw (ex-info "Failed to write image" {:format format :path new-path})))))
-
-;; Membrane does not support saving JPEG (I think)
-(defn save-as! [format path elem]
-  (imageIO-save-as! format path (->imageIO-image elem)))
-
-;; Facebook, LinkedIn, Slack, etcetera do not hide article info
-;; so we don't overlay the info on the image
-(defn create-share-image! [image-path new-path]
-  (->> (load-image image-path)
-       (crop-to-height 675 false)
-       (save-as! "jpg" new-path)))
-
-;; For X/Twitter we do the overlay thing
-(defn create-twitter-image! [image-path new-path {:keys [title description author]}]
-  (let [description-max 100
-        shortened-description (if (> (count description) description-max)
-                                (str (subs description 0 description-max) "…")
-                                description)]
-    (->> (load-image image-path)
-         (crop-to-height 675 true)
-         (add-texts! {:title title
-                      :author author
-                      :description shortened-description})
-         (save-as! "jpg" new-path))))
-
 ;; The Playground is this Rich Comment Form
 ;; Evaluate the top level forms in the `comment` form, one by one
 (comment
@@ -132,7 +75,7 @@
   (->> (ui/image original-path [1200 nil]) ;; aspect scales to 1200 in width
        (crop-to-height 675 true)
        (add-texts! article-meta)
-       (save-as! "jpg" (meta-fs/replace-ext original-path "-twitter.jpg")))
+       (skia/save-image (meta-fs/replace-ext original-path "-twitter.jpg")))
 
   ;; Use Membrane UI to work more interactively with the composition.
   ;; Either evaluate the whole `(do ...)` or do it form, by form.
