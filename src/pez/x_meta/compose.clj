@@ -51,18 +51,6 @@
      (ui/translate text-padding-w text-y
                    text)]))
 
-;; Only does shrinking
-(defn aspect-fill [[w h] elem]
-  (let [[ew eh] (ui/bounds elem)
-        sx (/ w ew)
-        sy (/ h eh)
-        s (min sx sy)]
-    (ui/scale s s
-              elem)))
-
-(defn aspect-scale-to-width [w elem]
-  (aspect-fill [w (second (ui/bounds elem))] elem))
-
 ;; Crop vertically, keeping the the middle of the image
 (defn crop-to-height [target-height pad? elem]
   (let [[w h] (ui/bounds elem)]
@@ -141,8 +129,7 @@
                      :description "Placing article header, author, and description as an image overlay on X Link Share Images."})
 
   ;; Writing to an image
-  (->> (ui/image original-path)
-       (aspect-scale-to-width 1200)
+  (->> (ui/image original-path [1200 nil]) ;; aspect scales to 1200 in width
        (crop-to-height 675 true)
        (add-texts! article-meta)
        (save-as! "jpg" (meta-fs/replace-ext original-path "-twitter.jpg")))
@@ -161,6 +148,16 @@
          (catch Exception e#
            (ui/label e#))))
 
+    ;; We use this to make our composition view fill the full width
+    ;; of the `dev-app` window
+    (defn aspect-fill [[w h] elem]
+      (let [[ew eh] (ui/bounds elem)
+            sx (/ w ew)
+            sy (/ h eh)
+            s (min sx sy)]
+        (ui/scale s s
+                  elem)))
+
     ;; Evaluate `debug-img` and open the file in your editor
     ;; (Handy if you have only one screen.)
     (defonce debug-img (str (fs/create-temp-file {:prefix "debug-img-" :suffix ".png"})))
@@ -171,8 +168,7 @@
          (aspect-fill
           [cw ch]
           (let [elem
-                (->> (ui/image original-path)
-                     (aspect-scale-to-width 1200)
+                (->> (ui/image original-path [1200 nil])
                      (crop-to-height 675 true)
                      (add-texts! article-meta))]
             (skia/save-image debug-img elem) ; This writes the debug image
