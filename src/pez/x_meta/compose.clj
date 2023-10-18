@@ -14,27 +14,28 @@
   (let [style #:text-style
                {:color [1 1 1]
                 :font-families ["Nimbus Sans" "Arial"] ;; Use whatever you fancy
-                :font-size 42}] ;; Needs to be pretty large, because phones
+                :font-size 72}] ;; Needs to be pretty large, because phones
     (ui/vertical-layout
      (para/paragraph
       {:text title
-       :style (merge style #:text-style {:font-style #:font-style {:weight :bold}})}
+       :style (merge style #:text-style {:font-style #:font-style {:weight :bold}
+                                         :font-size 144})}
       width)
      (ui/spacer 0 6)
      (para/paragraph
       {:text author
        :style (merge style #:text-style {:font-style #:font-style {:slant :italic}})}
       width)
-     (ui/spacer 0 6)
+     #_#_(ui/spacer 0 6)
      (para/paragraph
       {:text description
        :style style}
       width))))
 
 (defn create-text-overlay [[image-width image-height] texts]
-  (let [text-padding-w 30
-        text-padding-h 20
-        margin-bottom 88 ;; X overlays the site domain at the bottom of the image
+  (let [text-padding-w 60
+        text-padding-h 40
+        margin-bottom 128 ;; X overlays the site domain at the bottom of the image
         text-width (- image-width (* text-padding-w 2))
         text (create-text (assoc texts :width text-width))
         rect-height (+ (ui/height text) (* text-padding-h 2))
@@ -50,6 +51,7 @@
 
 ;; Crop vertically, keeping the the middle of the image
 (defn crop-to-height [target-height pad? elem]
+  (def elem elem)
   (let [[w h] (ui/bounds elem)]
     (if (> h target-height)
       (let [y-offset (quot (- h target-height) 2)]
@@ -62,6 +64,10 @@
 (defn add-texts! [texts elem]
   (let [overlay (create-text-overlay (ui/bounds elem) texts)]
     [elem overlay]))
+
+(defn add-logo [path x y scale-x scale-y elem]
+  [elem
+   (ui/translate x y (ui/image path [scale-x scale-y]))])
 
 (def ext->skia-format
   {"jpg" ::skia/image-format-jpeg
@@ -76,16 +82,19 @@
 ;; Evaluate the top level forms in the `comment` form, one by one
 (comment
   (def original-path "assets/kitten.png")
-  (def article-meta {:title "Adding Back Article Information to Links on X"
+  (def article-meta {:title "Adding Back Article Information to Links on X/Twitter"
                      :author "Peter Strömberg a.k.a. PEZ"
                      :description "Placing article header, author, and description as an image overlay on X Link Share Images."})
 
   ;; Writing to an image
-  (->> (ui/image original-path [1200 nil]) ;; aspect scales to 1200 in width
-       (crop-to-height 675 true)
-       (add-texts! article-meta)
-       (save! (meta-fs/replace-ext original-path "-twitter.jpg")
-              "jpg" ; use "png" for lossless compression regardless of quality
+  (->> (ui/image original-path [1920 nil]) ;; aspect scales to 1200 in width
+       (crop-to-height 1080 true)
+       (add-texts! {:title "Interactive Programming"
+                    :author "Coding Fun, Powered by Clojure & Membrane"
+                    :description ""})
+       (add-logo "assets/clojure.png" 50 50 nil nil)
+       (save! (meta-fs/replace-ext original-path "-youtube-thumbnail.jpg")
+              "png" ; use "png" for lossless compression regardless of quality
               80    ; for "jpg", it's a trade-off file size <-> fidelity
               ))
 
@@ -127,9 +136,12 @@
          (aspect-fill
           [cw ch]
           (let [elem
-                (->> (ui/image original-path [1200 nil])
-                     (crop-to-height 675 true)
-                     (add-texts! article-meta))]
+                (->> (ui/image original-path [1920 nil]) ;; aspect scales to 1200 in width
+                     (crop-to-height 1080 true)
+                     (add-texts! {:title "Interactive Programming"
+                                  :author "Coding Fun, Powered by Clojure & Membrane"
+                                  :description ""})
+                     (add-logo "assets/clojure.png" 50 50 nil nil))]
             (skia/save-image debug-img elem) ; This writes the debug image
                                              ; Note: Don't do this in prodcution
             elem)))))
