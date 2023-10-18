@@ -134,9 +134,13 @@
        (add-texts! article-meta)
        (save-as! "jpg" (meta-fs/replace-ext original-path "-twitter.jpg")))
 
-  ;; Use Membrane UI to work more interactively with the composition
-  ;; When you have evaluated this, you can try editing something above
-  ;; and evaluate that, and see what happens.
+  ;; Use Membrane UI to work more interactively with the composition.
+  ;; Either evaluate the whole `(do ...)` or do it form, by form.
+  ;; WHen you have started the UI app (that's the`(skia run ...)` below)
+  ;; you can try editing things in the program, evaluate that, and
+  ;; see what happens in the UI app.
+  ;; Use the `debug-img` to get live updates happening in a file you
+  ;; (e.g. in your editor).
   (do
     ;; Show errors in the UI
     (defmacro wrap-errors [body]
@@ -182,7 +186,7 @@
 
 
 
-  ;; Membrane Skia backend Hello World
+  ;; This is the Membrane Skia backend Hello World
   (skia/run (constantly
              (ui/label "hello World")))
 
