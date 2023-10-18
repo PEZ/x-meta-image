@@ -130,8 +130,9 @@
                 (->> (ui/image original-path [1200 nil])
                      (crop-to-height 675 true)
                      (add-texts article-meta))]
-            (skia/save-image debug-img elem) ; This writes the debug image
-                                             ; Note: Don't do this in prodcution
+            #_(skia/save-image debug-img elem) ; This writes the debug image
+                                               ; Note: Don't do this in prodcution
+                                               ; (It also slows down the app A LOT!)
             elem)))))
 
     ;; Start the UI app
