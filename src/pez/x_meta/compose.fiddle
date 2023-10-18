@@ -1,0 +1,68 @@
+;; Membrane saves rather big JPEG files, at least for the images I've tried with
+;; You can use the below code for smaller files.
+;; If you want even better control of the JPEG compression, you can explicitly
+;; select the ImageIO writer used and do things like `(.setCompressionQuality ...)`
+;; on it.
+
+(in-ns 'pez.x-meta.compose)
+
+(require '[clojure.java.io :as io]
+         '[membrane.skia :as skia]
+         '[pez.x-meta.fs :as meta-fs])
+
+(import '[java.awt.image BufferedImage]
+         [javax.imageio ImageIO])
+
+;; The Skia backend does not support converting to an image blob (I think)
+;; So we go via saving to a temp PNG file and reading it back up again
+(defn ->imageIO-image [elem]
+  (let [temp-path (str (meta-fs/tmp-path! "membrane-to-imageIO" (str (gensym "image-") ".png")))
+        _image? (skia/save-image temp-path elem nil nil 0 false) ;; TODO: Handle error?
+        file (io/as-file temp-path)]
+    (ImageIO/read file)))
+
+;; ImageIO/write does not want to produce JPEGs from images with alpha layers
+(defn imageIO-rgba->rgb [image]
+  (let [width (.getWidth image)
+        height (.getHeight image)
+        rgb-image (BufferedImage. width height BufferedImage/TYPE_INT_RGB)
+        g (.createGraphics rgb-image)]
+    (.drawImage g image 0 0 nil)
+    (.dispose g)
+    rgb-image))
+
+(defn imageIO-save-as! [format new-path image]
+  (let [new-image (if (= format "jpg")
+                    (imageIO-rgba->rgb image)
+                    image)
+        new-image-file (io/as-file new-path)]
+    (if (ImageIO/write new-image format new-image-file)
+      new-image-file
+      (throw (ex-info "Failed to write image" {:format format :path new-path})))))
+
+(defn save-as! [format path elem]
+  (imageIO-save-as! format path (->imageIO-image elem)))
+
+
+
+;; Some convenience functions you can plug in to your blog/website pipeline
+
+;; Facebook, LinkedIn, Slack, etcetera do not hide article info
+;; so we don't overlay the info on the image
+(defn create-share-image! [image-path new-path]
+  (->> (ui/image image-path)
+       (crop-to-height 675 false)
+       (skia/save-image new-path))) ; assuming new-path ends with `.jpg`
+
+;; For X/Twitter we do the overlay thing
+(defn create-twitter-image! [image-path new-path {:keys [title description author]}]
+  (let [description-max 100 ;; Obviously depends on the font and font-size used above
+        shortened-description (if (> (count description) description-max)
+                                (str (subs description 0 description-max) "…")
+                                description)]
+    (->> (ui/image image-path)
+         (crop-to-height 675 true)
+         (add-texts! {:title title
+                      :author author
+                      :description shortened-description})
+         (skia/save-image new-path))))
